@@ -26,9 +26,10 @@ export interface Skill {
 export interface Experience {
   id: number;
   title: string;
-  company?: string;
-  period: string;
+  company: string;
+  year: string;
   description: string;
+  logo: string;
   technologies?: string[];
 }
 

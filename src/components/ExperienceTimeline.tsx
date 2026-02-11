@@ -7,7 +7,9 @@ import ScrambledText from '@/blocks/TextAnimations/ScrambledText/ScrambledText';
 // Removed unused import
 // import { comma } from 'postcss/lib/list';
 
-const experiences = [
+import type { Experience } from '@/types';
+
+const experiences: Experience[] = [
   // ... your experiences array - Keep this array as is
   {
     id: 1,
