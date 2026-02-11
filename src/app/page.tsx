@@ -1,68 +1,40 @@
-// app/page.tsx (or wherever your page file is)
-
 'use client';
 
-import React from 'react'; // Removed useState
+import React from 'react';
+import GitHubCalendar from 'react-github-calendar';
 
-// Import your components and blocks
-
+// Import components and blocks
 import BlurText from '@/blocks/TextAnimations/BlurText/BlurText';
 import TrueFocus from '@/blocks/TextAnimations/TrueFocus/TrueFocus';
 import Threads from '@/blocks/Backgrounds/Threads/Threads';
 import ScrollVelocity from '@/blocks/TextAnimations/ScrollVelocity/ScrollVelocity';
-
-// ScrollReveal is imported but not used in the provided code snippet, keep if used elsewhere
-// import ScrollReveal from "@/blocks/TextAnimations/ScrollReveal/ScrollReveal";
-
 import ProfileCard from '@/blocks/Components/ProfileCard/ProfileCard';
 import ExperienceTimeline from '@/components/ExperienceTimeline';
-import SkillTag from '@/components/SkillTag'; // Assuming SkillTag is in components folder
-import ProjectCard from '@/components/ProjectCard'; // Import the new ProjectCard component
+import SkillTag from '@/components/SkillTag';
+import ProjectCard from '@/components/ProjectCard';
 import Lanyard from '@/components/Lanyard';
+
+// Import data and constants
 import projects from '@/data/projects';
-import GitHubCalendar from 'react-github-calendar';
+import { devSkills, contentSkills } from '@/data/skills';
+import { ANIMATION, LAYOUT, URLS, ASSETS, USER_INFO } from '@/constants';
 
-const handleAnimationComplete = () => {
-  console.log('Animation completed!');
-};
-
-// Define your skill arrays (you could also move these to a data file if they get long)
-const devSkills = [
-  'Next.js',
-  'Tailwind',
-  'React',
-  'Javascript',
-  'Node.js',
-  'Python',
-  'React Native',
-  'MongoDB',
-  'Express JS',
-  'MySQL',
-];
-
-const contentSkills = ['Figma', 'Canva', 'Capcut'];
 
 export default function Home() {
-  // Removed mobileMenuOpen state
   return (
-    // The cursor: 'none' style is now applied globally in layout.tsx
-    // Removed outer div as layout.tsx now handles the main structure
-    // <div className="flex flex-col min-h-screen bg-[#101112] font-gilroy"> // Removed this line
     <>
-      {' '}
-      {/* Added React Fragment wrapper */}
-      {/* Lanyard Component - positioned to hang from the top right, larger and with the top hidden */}
+      {/* Lanyard Component - positioned to hang from the top right */}
       <div className="absolute inset-y-0 right-0 z-20 h-screen w-[30%] overflow-visible">
         <Lanyard fov={10} />
       </div>
+
       {/* Main content area */}
-      <main className="flex-grow flex flex-col items-center h-full relative pt-20">
-        {' '}
-        {/* Added padding top to account for fixed header */}
+      <main className={`relative flex h-full flex-grow flex-col items-center pt-${LAYOUT.HERO_PADDING_TOP}`}>
+        {/* Background threads - desktop */}
         <div
           style={{
             width: '100%',
-            height: '600px',
+            height: `${LAYOUT.THREADS_HEIGHT}px`,
             position: 'absolute',
             bottom: '50',
           }}
@@ -74,14 +46,16 @@ export default function Home() {
             enableMouseInteraction={false}
           />
         </div>
+
+        {/* Background threads - mobile */}
         <div
           style={{
             width: '100%',
-            height: '600px',
+            height: `${LAYOUT.THREADS_HEIGHT}px`,
             position: 'absolute',
             bottom: '50',
           }}
-          className="md:hidden opacity-10"
+          className="opacity-10 md:hidden"
         >
           <Threads
             amplitude={2.5}
@@ -89,20 +63,21 @@ export default function Home() {
             enableMouseInteraction={false}
           />
         </div>
-        {/* ... other main content elements ... */}
-        <div className="w-full flex justify-center items-center my-4 md:mt-15 text-center font-bold relative px-4 md:px-0">
+
+        {/* Hero Section */}
+        <div className="relative my-4 flex w-full items-center justify-center px-4 text-center font-bold md:mt-15 md:px-0">
           <BlurText
-            text="Dimas Dekananta"
-            delay={150}
+            text={USER_INFO.NAME}
+            delay={ANIMATION.BLUR_TEXT_DELAY}
             animateBy="letters"
             direction="top"
-            onAnimationComplete={handleAnimationComplete}
-            className="lg:text-9xl md:text-7xl text-4xl text-center"
+            className="text-center text-4xl md:text-7xl lg:text-9xl"
           />
         </div>
-        <div className="font-bold text-center opacity-0 animate-fadeIn mt-1 md:mt-3">
+
+        <div className="mt-1 animate-fadeIn text-center font-bold opacity-0 md:mt-3">
           <TrueFocus
-            sentence="Web Developer|Mobile Developer|Solopreneur"
+            sentence={USER_INFO.ROLES}
             manualMode={true}
             blurAmount={5}
             borderColor="cyan"
@@ -110,6 +85,7 @@ export default function Home() {
             pauseBetweenAnimations={1}
           />
         </div>
+
         {/* style jsx block is fine */}
         <style jsx>{`
           @keyframes fadeIn {
@@ -155,7 +131,7 @@ export default function Home() {
               </h4>
               <div className="flex flex-wrap gap-2">
                 {devSkills.map((skill) => (
-                  <SkillTag key={skill} skillName={skill} />
+                  <SkillTag key={skill.name} skillName={skill.name} />
                 ))}
               </div>
             </div>
@@ -177,7 +153,7 @@ export default function Home() {
               </h4>
               <div className="flex flex-wrap gap-2">
                 {contentSkills.map((skill) => (
-                  <SkillTag key={skill} skillName={skill} />
+                  <SkillTag key={skill.name} skillName={skill.name} />
                 ))}
               </div>
             </div>
@@ -188,75 +164,67 @@ export default function Home() {
           <div className="flex flex-col">
             <BlurText
               text="What I do"
-              delay={150}
+              delay={ANIMATION.BLUR_TEXT_DELAY}
               animateBy="words"
               direction="top"
-              onAnimationComplete={handleAnimationComplete}
-              className="md:text-7xl text-3xl font-extrabold"
+              className="text-3xl font-extrabold md:text-7xl"
             />
 
-            <div className="hidden md:block mt-10 mb-20">
+            <div className="mb-20 mt-10 hidden md:block">
               <ProfileCard
-                name="Dimas Dekananta"
-                title="Web Developer"
-                handle="unicodes"
+                name={USER_INFO.NAME}
+                title={USER_INFO.TITLE_DESKTOP}
+                handle={USER_INFO.HANDLE}
                 status="Online"
                 contactText="Contact Me"
-                grainUrl="/photos/texture/grain.webp"
-                iconUrl="/photos/texture/iconpattern.png"
-                avatarUrl="/photos/profile/profilecard.svg"
-                miniAvatarUrl="/photos/profile/profilecard_2.svg"
+                grainUrl={ASSETS.GRAIN_TEXTURE}
+                iconUrl={ASSETS.ICON_PATTERN}
+                avatarUrl={ASSETS.PROFILE_AVATAR}
+                miniAvatarUrl={ASSETS.PROFILE_MINI_AVATAR}
                 showUserInfo={true}
                 enableTilt={true}
-                onContactClick={() =>
-                  window.open(
-                    'https://www.linkedin.com/in/dimas-dekananta',
-                    '_blank'
-                  )
-                }
+                onContactClick={() => window.open(URLS.LINKEDIN, '_blank')}
               />
             </div>
 
-            <div className="md:hidden mt-10 mb-20">
+            <div className="mb-20 mt-10 md:hidden">
               <ProfileCard
-                name="Dimas Dekananta"
-                title="Software Engineer"
-                handle="unicodes"
+                name={USER_INFO.NAME}
+                title={USER_INFO.TITLE_MOBILE}
+                handle={USER_INFO.HANDLE}
                 status="Online"
-                grainUrl="/photos/texture/grain.webp"
-                iconUrl="/photos/texture/iconpattern.png"
+                grainUrl={ASSETS.GRAIN_TEXTURE}
+                iconUrl={ASSETS.ICON_PATTERN}
                 contactText="Contact Me"
-                avatarUrl="/photos/profile/profilecard.svg"
+                avatarUrl={ASSETS.PROFILE_AVATAR}
                 showUserInfo={true}
                 enableTilt={true}
-                onContactClick={() => console.log('Contact clicked')}
+                onContactClick={() => window.open(URLS.LINKEDIN, '_blank')}
               />
             </div>
           </div>
         </div>
         {/* Experience Section */}
-        <div className="flex w-full items-center justify-center p-4 md:mt-25 mt-5">
+        <div className="mt-5 flex w-full items-center justify-center p-4 md:mt-25">
           <BlurText
-            text=" My Journey"
-            delay={150}
+            text="My Journey"
+            delay={ANIMATION.BLUR_TEXT_DELAY}
             animateBy="words"
             direction="top"
-            onAnimationComplete={handleAnimationComplete}
-            className="md:text-7xl text-3xl font-extrabold"
+            className="text-3xl font-extrabold md:text-7xl"
           />
         </div>
         <ExperienceTimeline />
-        <div className="flex w-full items-center justify-center p-4 md:mt-25 mt-5 font-extrabold">
+        <div className="mt-5 flex w-full items-center justify-center p-4 font-extrabold md:mt-25">
           <BlurText
-            text=" My Projects"
-            delay={150}
+            text="My Projects"
+            delay={ANIMATION.BLUR_TEXT_DELAY}
             animateBy="letters"
             direction="top"
-            onAnimationComplete={handleAnimationComplete}
-            className="md:text-7xl text-3xl font-extrabold"
+            className="text-3xl font-extrabold md:text-7xl"
           />
         </div>
-        <GitHubCalendar username="dimasdekka" />
+        <GitHubCalendar username={USER_INFO.GITHUB_USERNAME} />
         {/* Projects Section Start */}
         {/* Modified this div to use a grid layout for two columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 w-full max-w-[1400px] mx-auto mt-10">

@@ -10,10 +10,6 @@ import HackathonEntry from './HackathonEntry';
 import CircularGallery from '@/blocks/Components/CircularGallery/CircullarGallery';
 import TextPressure from '@/blocks/TextAnimations/TextPressure/TextPressure';
 
-const handleAnimationComplete = () => {
-  console.log('Hackathon page animation completed!');
-};
-
 // Define your hackathon entry data
 const hackathonEntriesData = [
   {
@@ -98,7 +94,6 @@ export default function Hackathons() {
             delay={50}
             animateBy="letters"
             direction="top"
-            onAnimationComplete={handleAnimationComplete}
             className="text-3xl md:text-7xl font-extrabold text-center"
           />
         </div>

@@ -1,19 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import type { ProjectCardProps } from '@/types';
 
-interface ProjectCardProps {
-  project: {
-    id: number;
-    number: string;
-    title: string;
-    description: string;
-    techstack: string[];
-    imageSrc: string; 
-    link: string; 
-  };
-  index: number; 
-}
 
 // --- Optimization 1: Use React.memo ---
 // Wrap the component with React.memo. This prevents the component from re-rendering
