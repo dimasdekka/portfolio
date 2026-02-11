@@ -11,11 +11,37 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends("prettier"),
+  ...compat.plugins("jsx-a11y"),
   {
-    // Add a rules property to disable specific rules
     rules: {
-      "@typescript-eslint/no-explicit-any": "off", // Disable the no-explicit-any rule
-      // Add other rules you want to configure here
+      // TypeScript rules
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/consistent-type-imports": [
+        "warn",
+        { prefer: "type-imports" },
+      ],
+
+      // React rules
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
+      // General code quality
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "prefer-const": "warn",
+      "no-var": "error",
+
+      // Accessibility
+      "jsx-a11y/alt-text": "warn",
+      "jsx-a11y/anchor-is-valid": "warn",
+      "jsx-a11y/click-events-have-key-events": "warn",
+      "jsx-a11y/no-static-element-interactions": "warn",
     },
   },
 ];
