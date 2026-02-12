@@ -8,58 +8,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import Lenis from '@studio-freight/lenis';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
-// import GooeyNav from '@/blocks/Components/GooeyNav/GooeyNav';
 import Dock from '@/blocks/Components/Dock/Dock';
-// import { usePathname } from 'next/navigation';
-// Import the Link component from next/link
 import Link from 'next/link';
 
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { gilroy } from '@/fonts/fonts';
-import { VscHome, VscArchive, VscAccount } from 'react-icons/vsc';
-
-// Define items for GooeyNav (moved from page.tsx)
-// const items = [
-//   { label: 'Home', href: '/' },
-//   { label: 'Awards', href: '/Hackathons' },
-//   { label: 'Contact', href: '/Contact' }, // Adjust as needed
-// ];
-
-const items = [
-  { icon: <VscHome size={18} />, label: 'Home', href: '/', onClick: () => {} },
-  {
-    icon: <VscArchive size={18} />,
-    label: 'Archive',
-    href: '/Archive',
-    onClick: () => {},
-  },
-  {
-    icon: <VscAccount size={18} />,
-    label: 'Profile',
-    href: '/Contact',
-    onClick: () => {},
-  },
-];
-
-// Define social media links and placeholder icon paths
-const socialLinks = [
-  {
-    platform: 'GitHub',
-    href: 'https://github.com/dimasdekka',
-    iconPath: '/icons/github_icon.svg',
-  },
-  {
-    platform: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/dimas-dekananta/',
-    iconPath: '/icons/linkedin_icon.svg',
-  },
-  {
-    platform: 'Gmail',
-    href: 'mailto:dekanantadimas@gmail.com',
-    iconPath: '/icons/gmail_icon.svg',
-  },
-];
+import {
+  NAV_ITEMS,
+  SOCIAL_LINKS,
+  CURSOR_CONFIG,
+  SPRING_CONFIG,
+  LENIS_CONFIG,
+  RESPONSIVE,
+  SPACING,
+  ICON_SIZES,
+  DOCK_CONFIG,
+  SOCIAL_CONTAINER,
+  Z_INDEX,
+} from './config';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -89,30 +56,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // State for mobile menu (moved from page.tsx)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Get current pathname
-  // const pathname = usePathname();
-
-  // // Calculate active index based on pathname
-  // const activeIndex = items.findIndex((item) => item.href === pathname);
-
-  // --- Lenis Smooth Scrolling Implementation ---
-  // Use useRef to hold the Lenis instance
   const lenis = useRef<Lenis | null>(null);
 
   useEffect(() => {
     // Initialize Lenis only in the browser environment
     if (typeof window !== 'undefined') {
-      lenis.current = new Lenis({
-        duration: 1.2, // Adjust the duration for scroll speed (seconds)
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function (default lenis easing)
-        smoothWheel: true, // Enable smooth scrolling for mouse wheel
-        // wheelMultiplier: 1, // Adjust scroll speed sensitivity
-        // touchMultiplier: 1,
-        // infinite: false, // Set to true for infinite looping scrolling
-        // autoResize: true, // Automatically handle window resizing
-      });
+      lenis.current = new Lenis(LENIS_CONFIG);
 
       // This function updates Lenis on each frame using requestAnimationFrame
       function raf(time: number) {
@@ -129,37 +79,22 @@ export default function RootLayout({
       };
     }
   }, []); // Empty dependency array ensures this effect runs only once on mount and cleans up on unmount
-  // --- End Lenis Implementation ---
-
-  // --- Custom Cursor Implementation (Moved from page.tsx) ---
-  // Use MotionValues to track the raw mouse position
-  // Initialize to 0 on both server and client to prevent hydration errors
+  // --- Custom Cursor Implementation ---
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
 
-  // Configure spring physics for the dot (follows closely)
-  const dotSpringConfig = { damping: 25, stiffness: 200 };
-  // Configure spring physics for the outline (trails the dot)
-  const outlineSpringConfig = { damping: 35, stiffness: 400 }; // More damping/less stiffness for trailing
+  const dotX = useSpring(cursorX, SPRING_CONFIG.DOT);
+  const dotY = useSpring(cursorY, SPRING_CONFIG.DOT);
 
-  // Create sprung motion values for the inner dot
-  const dotX = useSpring(cursorX, dotSpringConfig);
-  const dotY = useSpring(cursorY, dotSpringConfig);
+  const outlineX = useSpring(dotX, SPRING_CONFIG.OUTLINE);
+  const outlineY = useSpring(dotY, SPRING_CONFIG.OUTLINE);
 
-  // Create sprung motion values for the outer outline, based on the dot's sprung values
-  const outlineX = useSpring(dotX, outlineSpringConfig);
-  const outlineY = useSpring(dotY, outlineSpringConfig);
-
-  // Effect to update mouse position on mousemove AND set initial position after mount
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
     };
 
-    // Set initial cursor position to the center of the window after the component mounts
-    // This runs only on the client after hydration
-    // setTimeout is optional, but can help ensure initial positioning after paint
     setTimeout(() => {
       cursorX.set(window.innerWidth / 2);
       cursorY.set(window.innerHeight / 2);
@@ -178,117 +113,81 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        // Added bg-black class for black background
-        className={`${geistSans.variable} ${geistMono.variable} ${gilroy.variable} antialiased font-gilroy bg-black`}
-        style={{ cursor: 'none' }} // Apply cursor: none globally to the body
+        className={`${geistSans.variable} ${geistMono.variable} ${gilroy.variable} select-none bg-black font-gilroy antialiased`}
+        style={{ cursor: 'none' }}
       >
         {/* Custom Cursor Dot */}
         <motion.div
           style={{
-            x: dotX, // Bind x position to the dot's sprung motion value
-            y: dotY, // Bind y position to the dot's sprung motion value
-            pointerEvents: 'none', // Ensure the cursor doesn't block clicks on elements below it
-            left: 0, // Position relative to the viewport
+            x: dotX,
+            y: dotY,
+            pointerEvents: 'none',
+            left: 0,
             top: 0,
-            position: 'fixed', // Stay in fixed position relative to the viewport
-            zIndex: 9999, // Ensure it's always on top
-            transform: 'translate(-50%, -50%)', // Center the div exactly on the cursor coordinates
-            width: '8px', // Size of the inner dot
-            height: '8px',
-            borderRadius: '50%', // Make it round
-            backgroundColor: '#06b6d4', // Cyan color (Tailwind cyan-500 equivalent)
-            boxShadow: '0 0 10px 4px rgba(6, 182, 212, 0.7)', // Glowing effect
+            position: 'fixed',
+            zIndex: Z_INDEX.CURSOR_DOT,
+            transform: 'translate(-50%, -50%)',
+            width: `${CURSOR_CONFIG.DOT.size}px`,
+            height: `${CURSOR_CONFIG.DOT.size}px`,
+            borderRadius: '50%',
+            backgroundColor: CURSOR_CONFIG.DOT.color,
+            boxShadow: `0 0 ${CURSOR_CONFIG.DOT.glowSize}px ${CURSOR_CONFIG.DOT.glowSpread}px ${CURSOR_CONFIG.DOT.glowColor}`,
           }}
-          className="hidden md:block" // Hide on mobile (optional, can be removed if you want it on mobile too)
+          className={RESPONSIVE.HIDDEN_MOBILE}
         />
         {/* Custom Cursor Outline */}
         <motion.div
           style={{
-            x: outlineX, // Bind x position to the outline's sprung motion value
-            y: outlineY, // Bind y position to the outline's sprung motion value
-            pointerEvents: 'none', // Ensure the cursor doesn't block clicks
-            left: 0, // Position relative to the viewport
+            x: outlineX,
+            y: outlineY,
+            pointerEvents: 'none',
+            left: 0,
             top: 0,
-            position: 'fixed', // Stay in fixed position
-            zIndex: 9998, // Z-index slightly lower than the dot
-            transform: 'translate(-50%, -50%)', // Center the div
-            width: '30px', // Size of the outer circle
-            height: '30px',
-            borderRadius: '50%', // Make it round
-            border: '2px solid #0891b2', // Border color (Tailwind cyan-600 equivalent)
-            // Optional: opacity for transparency
-            opacity: 0.5,
+            position: 'fixed',
+            zIndex: Z_INDEX.CURSOR_OUTLINE,
+            transform: 'translate(-50%, -50%)',
+            width: `${CURSOR_CONFIG.OUTLINE.size}px`,
+            height: `${CURSOR_CONFIG.OUTLINE.size}px`,
+            borderRadius: '50%',
+            border: `${CURSOR_CONFIG.OUTLINE.borderWidth}px solid ${CURSOR_CONFIG.OUTLINE.borderColor}`,
+            opacity: CURSOR_CONFIG.OUTLINE.opacity,
           }}
-          className="hidden md:block" // Hide on mobile (optional, can be removed if you want it on mobile too)
+          className={RESPONSIVE.HIDDEN_MOBILE}
         />
-        {/* Header Section */}
-        {/* Adjusted padding for different screen sizes */}
-        <header className="sticky top-0 z-50 flex w-full items-center justify-between px-4 py-2 md:px-8 md:py-3 bg-transparent backdrop-blur-[3px]">
-          {/* Logo */}
-          {/* Using Link for Logo if it navigates to home */}
-          {/* Adjusted margin for different screen sizes */}
+        <header
+          className={`sticky top-0 z-50 flex w-full items-center justify-between bg-transparent backdrop-blur-[3px] ${SPACING.HEADER_PADDING}`}
+        >
           <Link href="/" passHref>
             <Image
               src="/logo/logo.png"
               alt="D Logo"
-              width={35} // Base size for logo
-              height={35} // Base size for logo
-              // Added responsive sizing for the logo image itself if needed (optional, depends on design)
-              // className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 m-4 md:m-10 transition-all duration-300 hover:scale-150 hover:rotate-10 hover:brightness-125"
-              className="m-4 md:m-10 transition-all duration-300 hover:scale-150 hover:rotate-10 hover:brightness-125" // Adjusted margin
+              width={35}
+              height={35}
+              className="hover:rotate-10 m-4 transition-all duration-300 hover:scale-150 hover:brightness-125 md:m-10"
             />
           </Link>
 
-          {/* Desktop Navigation - hidden on small screens */}
-          {/* Container with fixed dimensions - GooeyNav should handle internal responsiveness */}
-          {/* <div
-            className="hidden md:block font-medium"
-            style={{ height: '70px', width: '400px', position: 'relative' }}
-          >
-            <GooeyNav
-              items={items} // The items array contains { label, href }
-              particleCount={15}
-              particleDistances={[90, 10]}
-              particleR={100}
-              initialActiveIndex={activeIndex !== -1 ? activeIndex : 0} // Set dynamically, default to 0 if not found
-              animationTime={600}
-              timeVariance={300}
-              colors={[1, 2, 3, 1, 2, 3, 1, 4]}
-              // IMPORTANT: The GooeyNav component itself needs to use <Link> internally for its items
-            />
-          </div> */}
-
           {/* Hamburger button - visible only on small screens */}
           <button
-            className="md:hidden text-white p-2 focus:outline-none"
+            className="p-2 text-white focus:outline-none md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle mobile menu" // Added accessibility label
+            aria-label="Toggle mobile menu"
           >
-            {/* Hamburger icon lines */}
-            {/* Added transition for animation if you want to animate the icon */}
-            <div className="w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 ease-in-out"></div>
-            <div className="w-6 h-0.5 bg-white mb-1.5 transition-all duration-300 ease-in-out"></div>
-            <div className="w-6 h-0.5 bg-white transition-all duration-300 ease-in-out"></div>
+            <div className="mb-1.5 h-0.5 w-6 bg-white transition-all duration-300 ease-in-out"></div>
+            <div className="mb-1.5 h-0.5 w-6 bg-white transition-all duration-300 ease-in-out"></div>
+            <div className="h-0.5 w-6 bg-white transition-all duration-300 ease-in-out"></div>
           </button>
         </header>
-        {/* Mobile menu - only visible when mobileMenuOpen is true */}
-        {/* Positioned fixed below the header, covers full width on mobile */}
         {mobileMenuOpen && (
-          // Changed position from absolute to fixed
-          // Adjusted top position to match header height at different breakpoints
-          // Added overflow-y-auto to allow scrolling if the menu content is taller than the viewport
-          <div className="md:hidden bg-transparent backdrop-blur-[10px] pt-10 fixed top-[72px] sm:top-[80px] md:top-[96px] right-0 left-0 z-40 p-4 sm:p-5 overflow-y-auto h-[calc(100vh - 72px)] sm:h-[calc(100vh - 80px)] md:h-[calc(100vh - 96px)]">
+          <div className="h-[calc(100vh - 72px)] sm:h-[calc(100vh - 80px)] md:h-[calc(100vh - 96px)] fixed left-0 right-0 top-[72px] z-40 overflow-y-auto bg-transparent p-4 pt-10 backdrop-blur-[10px] sm:top-[80px] sm:p-5 md:top-[96px] md:hidden">
             {' '}
-            {/* Adjusted top position, added overflow-y-auto and height */}
             <nav className="flex flex-col space-y-4">
-              {items.map((item, index) => (
-                // Using <Link> for navigation items
+              {NAV_ITEMS.map((item, index) => (
                 <Link
                   key={index}
                   href={item.href}
-                  // Added responsive padding to the links
-                  className="text-white hover:text-gray-300 py-2 px-4 font-medium text-base sm:text-lg" // Adjusted text size
-                  onClick={() => setMobileMenuOpen(false)} // Keep the click handler to close the menu
+                  className="px-4 py-2 text-base font-medium text-white hover:text-gray-300 sm:text-lg"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
@@ -296,44 +195,37 @@ export default function RootLayout({
             </nav>
           </div>
         )}
-        {/* End Header Section */}
         {children}{' '}
         {/* This is where your page content (like page.tsx) will be rendered */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+        <div className={`fixed bottom-6 left-1/2 z-50 -translate-x-1/2`}>
           <Dock
-            items={items}
-            panelHeight={68}
-            baseItemSize={50}
-            magnification={90}
+            items={NAV_ITEMS as any}
+            panelHeight={DOCK_CONFIG.panelHeight}
+            baseItemSize={DOCK_CONFIG.baseItemSize}
+            magnification={DOCK_CONFIG.magnification}
           />
         </div>
-        {/* Sticky Social Media Container */}
-        {/* Positioned fixed to the bottom right */}
-        {/* Added responsive padding, rounded corners, border, and background */}
-        <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 bg-black/60 border border-white/[.30] border-dashed rounded-full p-2 md:p-4 flex flex-col items-center space-y-7 md:space-y-5">
-          {socialLinks.map((link) => (
-            // Link for each social media icon
+        <div
+          className={`fixed bottom-4 right-4 z-50 md:bottom-8 md:right-8 ${SOCIAL_CONTAINER.backdrop} ${SOCIAL_CONTAINER.border} ${SOCIAL_CONTAINER.rounded} ${SPACING.SOCIAL_PADDING} flex flex-col items-center ${SPACING.SOCIAL_SPACE}`}
+        >
+          {SOCIAL_LINKS.map((link) => (
             <Link
               key={link.platform}
               href={link.href}
-              target="_blank" // Open link in new tab
-              rel="noopener noreferrer" // Security best practice for target="_blank"
-              // Added hover effects
+              target="_blank"
+              rel="noopener noreferrer"
               className="transition-transform duration-200 hover:scale-110"
             >
-              {/* Social media icon image */}
               <Image
-                src={link.iconPath} // Use the icon path from the socialLinks array
+                src={link.iconPath}
                 alt={`${link.platform} icon`}
-                // Adjusted icon size responsively
-                width={20} // Base size for mobile
-                height={20} // Base size for mobile
-                className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 object-contain" // Responsive size and object-contain
+                width={20}
+                height={20}
+                className={`${ICON_SIZES.SOCIAL.width} ${ICON_SIZES.SOCIAL.height} object-contain`}
               />
             </Link>
           ))}
         </div>
-        {/* End Sticky Social Media Container */}
         <Analytics />
         <SpeedInsights />
       </body>

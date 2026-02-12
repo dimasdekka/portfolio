@@ -1,6 +1,6 @@
 {
   "name": "dimas-portfolio",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,9 +13,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@react-three/drei": "^10.3.0",
-    "@react-three/fiber": "^9.1.2",
-    "@react-three/rapier": "^2.1.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@react-three/rapier": "^2.2.0",
     "@studio-freight/lenis": "^1.0.42",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -23,11 +23,11 @@
     "gsap": "^3.13.0",
     "matter-js": "^0.20.0",
     "meshline": "^3.3.1",
-    "next": "15.3.1",
+    "next": "^16.1.6",
     "ogl": "^1.0.11",
     "postcss": "^8.5.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-github-calendar": "^4.5.7",
     "react-icons": "^5.5.0",
     "three": "^0.177.0",

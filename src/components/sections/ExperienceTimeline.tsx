@@ -7,7 +7,7 @@ import ScrambledText from '@/blocks/TextAnimations/ScrambledText/ScrambledText';
 // Removed unused import
 // import { comma } from 'postcss/lib/list';
 
-import type { Experience } from '@/types';
+import type { Experience } from '@/lib/types';
 
 const experiences: Experience[] = [
   // ... your experiences array - Keep this array as is
@@ -63,19 +63,19 @@ const ExperienceTimeline: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8 mt-10"
+      className="relative mx-auto mt-10 w-full max-w-5xl px-4 py-16 sm:px-6 lg:px-8"
     >
       {/* Central Timeline Line */}
       {/* Framer Motion automatically promotes transform properties for hardware acceleration */}
       <motion.div
-        className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-cyan-600 to-cyan-800 transform -translate-x-1/2"
+        className="absolute bottom-0 left-1/2 top-0 w-1 -translate-x-1/2 transform bg-gradient-to-b from-cyan-400 via-cyan-600 to-cyan-800"
         style={{ scaleY: scaleY, transformOrigin: 'top' }}
       />
 
       {/* Glowing Dot */}
       {/* Framer Motion handles the 'top' style updates efficiently */}
       <motion.div
-        className="absolute left-1/2 w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_15px_5px_rgba(0,255,255,0.5)] transform -translate-x-1/2"
+        className="absolute left-1/2 h-4 w-4 -translate-x-1/2 transform rounded-full bg-cyan-500 shadow-[0_0_15px_5px_rgba(0,255,255,0.5)]"
         // Use the dotTop motion value (derived from the sprung scaleY) for the top style
         style={{ top: dotTop }}
         // Optional: Add will-change property as a hint to the browser (use with caution)
@@ -87,7 +87,7 @@ const ExperienceTimeline: React.FC = () => {
           // Changed grid to 2 columns, removed the 'auto' middle column
           <div
             key={exp.id}
-            className="relative grid grid-cols-1 md:grid-cols-2 items-start gap-x-20 bg-black rounded-2xl p-6 shadow-lg md:bg-transparent"
+            className="relative grid grid-cols-1 items-start gap-x-20 rounded-2xl bg-black p-6 shadow-lg md:grid-cols-2 md:bg-transparent"
           >
             {/* Side 1: Title, Company, Year, Logo - Conditional Alignment */}
             {/* Side 1: Title, Company, Year, Logo */}
@@ -134,7 +134,7 @@ const ExperienceTimeline: React.FC = () => {
                 </ScrambledText>
               </span>
 
-              <div className="w-10 h-10 relative flex items-center justify-center md:my-0 my-5">
+              <div className="relative my-5 flex h-10 w-10 items-center justify-center md:my-0">
                 <Image
                   src={exp.logo}
                   alt={`${exp.company} logo`}

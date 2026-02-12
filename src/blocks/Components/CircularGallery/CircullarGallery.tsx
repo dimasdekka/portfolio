@@ -620,6 +620,19 @@ class App {
     window.addEventListener('touchend', this.boundOnTouchUp);
   }
 
+  play() {
+    if (!this.raf) {
+      this.update();
+    }
+  }
+
+  pause() {
+    if (this.raf) {
+      window.cancelAnimationFrame(this.raf);
+      this.raf = 0;
+    }
+  }
+
   destroy() {
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.boundOnResize);
@@ -668,13 +681,27 @@ export default function CircularGallery({
       borderRadius,
       font,
     });
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          app.play();
+        } else {
+          app.pause();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(containerRef.current);
+
     return () => {
+      observer.disconnect();
       app.destroy();
     };
   }, [items, bend, textColor, borderRadius, font]);
   return (
     <div
-      className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing"
+      className="h-full w-full cursor-grab overflow-hidden active:cursor-grabbing"
       ref={containerRef}
     />
   );
