@@ -1,6 +1,6 @@
 # Portfolio - Dimas Dekananta
 
-![Portfolio Banner](/photos/banner/banner.png)
+![Portfolio Banner](public/photos/banner/banner.png)
 
 A modern, interactive portfolio website built with Next.js, featuring 3D animations, smooth transitions, and a clean, professional design.
 
