@@ -6,23 +6,40 @@ A modern, interactive portfolio website built with Next.js, featuring 3D animati
 
 ## ✨ Features
 
-- **Interactive 3D Elements**: Physics-based lanyard component using Three.js and Rapier
-- **Smooth Animations**: Framer Motion powered animations throughout
-- **Responsive Design**: Mobile-first approach with Tailwind CSS
-- **Type-Safe**: Built with TypeScript for better code quality
-- **Performance Optimized**: Next.js 15 with React 19
-- **Clean Code**: Following enterprise-level coding standards
+- **Interactive 3D Elements**:
+  - Physics-based **Lanyard** component using Three.js and Rapier
+  - **Threads** background animation with mouse interaction
+  - **Circular Gallery** for project archives
+- **Advanced Text Animations**:
+  - **FallingText** with Matter.js physics
+  - **TrueFocus**, **BlurText**, and **ScrollVelocity** effects
+- **Performance Optimized**:
+  - Dynamic imports for heavy components
+  - `IntersectionObserver` to pause off-screen animations
+  - `useMediaQuery` for responsive conditional rendering
+- **Modern UI/UX**:
+  - Custom cursor with spring animations
+  - Glassmorphism effects and noise textures
+  - Dock-style navigation
+  - Fully responsive mobile-first design
+- **Type-Safe**: Built with TypeScript for robust code quality
 
 ## 🚀 Tech Stack
 
-- **Framework**: [Next.js 15](https://nextjs.org/)
+- **Framework**: [Next.js 16 (Turbopack)](https://nextjs.org/)
 - **UI Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **3D Graphics**: [Three.js](https://threejs.org/) + [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber)
-- **Physics**: [@react-three/rapier](https://github.com/pmndrs/react-three-rapier)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animations**:
+  - [Framer Motion](https://www.framer.com/motion/)
+  - [GSAP](https://greensock.com/gsap/)
+- **3D & Physics**:
+  - [Three.js](https://threejs.org/)
+  - [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber)
+  - [@react-three/drei](https://github.com/pmndrs/drei)
+  - [@react-three/rapier](https://github.com/pmndrs/react-three-rapier)
+  - [Matter.js](https://brm.io/matter-js/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Code Quality**: ESLint, Prettier, Husky
+- **Tooling**: ESLint, Prettier, Husky
 
 ## 📦 Installation
 
@@ -55,54 +72,32 @@ A modern, interactive portfolio website built with Next.js, featuring 3D animati
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 🛠️ Available Scripts
-
-| Command                | Description                  |
-| ---------------------- | ---------------------------- |
-| `npm run dev`          | Start development server     |
-| `npm run build`        | Build for production         |
-| `npm start`            | Start production server      |
-| `npm run lint`         | Run ESLint                   |
-| `npm run format`       | Format code with Prettier    |
-| `npm run format:check` | Check code formatting        |
-| `npm run type-check`   | Run TypeScript type checking |
-
 ## 📁 Project Structure
 
 ```
 portfolio/
 ├── src/
 │   ├── app/              # Next.js app directory
+│   │   ├── Archive/      # Projects archive page
 │   │   ├── page.tsx      # Main homepage
-│   │   ├── layout.tsx    # Root layout
-│   │   └── globals.css   # Global styles
+│   │   ├── layout.tsx    # Root layout & global providers
+│   │   └── globals.css   # Global styles & Tailwind
 │   ├── blocks/           # Complex UI blocks
-│   │   ├── Backgrounds/  # Background components
-│   │   ├── Components/   # Feature components
-│   │   └── TextAnimations/ # Text animation components
+│   │   ├── Backgrounds/  # Threads, etc.
+│   │   ├── Components/   # Dock, CircularGallery, etc.
+│   │   └── TextAnimations/ # FallingText, BlurText, etc.
 │   ├── components/       # Reusable components
+│   │   ├── ui/           # Generic UI elements (ProfileCard, etc.)
 │   │   ├── ExperienceTimeline.tsx
 │   │   ├── Lanyard.tsx
-│   │   ├── ProjectCard.tsx
-│   │   └── SkillTag.tsx
-│   ├── data/            # Static data
-│   │   ├── projects.ts  # Project information
-│   │   └── skills.ts    # Skills data
-│   ├── types/           # TypeScript type definitions
-│   │   └── index.ts
-│   ├── constants/       # App constants
-│   │   └── index.ts
-│   └── fonts/           # Custom fonts
+│   │   └── ProjectCard.tsx
+│   ├── data/            # Static data content
+│   ├── hooks/           # Custom hooks (useMediaQuery, etc.)
+│   ├── lib/             # Utilities and constants
+│   ├── types/           # TypeScript definitions
+│   └── fonts/           # Local fonts
 ├── public/              # Static assets
-│   ├── assets/          # 3D models, textures
-│   ├── photos/          # Images
-│   ├── proj/            # Project screenshots
-│   └── techstack/       # Technology icons
-├── .github/             # GitHub templates
-│   ├── ISSUE_TEMPLATE/  # Issue templates
-│   └── PULL_REQUEST_TEMPLATE.md
-├── .husky/              # Git hooks
-└── CONTRIBUTING.md      # Contribution guidelines
+└── ...config files (next.config.ts, tailwind.config.js, etc.)
 ```
 
 ## 🎨 Customization
