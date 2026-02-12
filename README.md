@@ -1,5 +1,7 @@
 # Portfolio - Dimas Dekananta
 
+![Portfolio Banner](/banner.png)
+
 A modern, interactive portfolio website built with Next.js, featuring 3D animations, smooth transitions, and a clean, professional design.
 
 ## ✨ Features
@@ -32,17 +34,20 @@ A modern, interactive portfolio website built with Next.js, featuring 3D animati
 ### Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/dimasdekka/portfolio.git
    cd portfolio
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Run development server**
+
    ```bash
    npm run dev
    ```
@@ -52,15 +57,15 @@ A modern, interactive portfolio website built with Next.js, featuring 3D animati
 
 ## 🛠️ Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Prettier |
-| `npm run format:check` | Check code formatting |
-| `npm run type-check` | Run TypeScript type checking |
+| Command                | Description                  |
+| ---------------------- | ---------------------------- |
+| `npm run dev`          | Start development server     |
+| `npm run build`        | Build for production         |
+| `npm start`            | Start production server      |
+| `npm run lint`         | Run ESLint                   |
+| `npm run format`       | Format code with Prettier    |
+| `npm run format:check` | Check code formatting        |
+| `npm run type-check`   | Run TypeScript type checking |
 
 ## 📁 Project Structure
 
@@ -159,6 +164,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for de
 ### Code Quality
 
 This project uses:
+
 - **ESLint** for code linting
 - **Prettier** for code formatting
 - **Husky** for pre-commit hooks
@@ -173,6 +179,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 👤 Author
 
 **Dimas Dekananta**
+
 - GitHub: [@dimasdekka](https://github.com/dimasdekka)
 - LinkedIn: [Dimas Dekananta](https://www.linkedin.com/in/dimas-dekananta)
 
